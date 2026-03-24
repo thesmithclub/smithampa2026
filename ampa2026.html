@@ -459,10 +459,6 @@
   const items = getSelectedItems();
   const meeting = document.getElementById('meeting').value.trim();
 
-  if (!date) { showToast('작성일을 선택해 주세요.', true); return; }
-  if (!company) { showToast('회사명을 입력해 주세요.', true); return; }
-  if (!name) { showToast('이름을 입력해 주세요.', true); return; }
-
   const btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = '저장 중...';
