@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMPA 2026 – 상담일지</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: #f0f0f0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 20px;
+    }
+
+    /* ── 종이 ── */
+    .page {
+      position: relative;
+      background: #fff;
+      width: 680px;
+      min-height: 960px;
+      padding: 48px 52px 52px 72px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.12);
+    }
+
+    /* 왼쪽 녹색 바 */
+    .page::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 7px;
+      background: #1B4D2E;
+    }
+
+    /* 오른쪽 녹색 바 (하단 절반) */
+    .page::after {
+      content: '';
+      position: absolute;
+      right: 0; bottom: 0;
+      width: 7px;
+      height: 55%;
+      background: #1B4D2E;
+    }
+
+    /* ── 헤더 ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .title {
+      font-size: 42px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      color: #111;
+      line-height: 1;
+    }
+
+    /* THE SMITH 로고 */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .logo svg { width: 36px; height: 36px; }
+    .logo-text {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #111;
+    }
+
+    /* ── 작성일 행 ── */
+    .date-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .date-row label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #111;
+      white-space: nowrap;
+    }
+    .date-row input[type="date"] {
+      border: none;
+      border-bottom: 2px solid #111;
+      padding: 4px 6px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #111;
+      background: transparent;
+      outline: none;
+      cursor: pointer;
+      flex: 1;
+      max-width: 200px;
+    }
+    .btn-today {
+      background: #1B4D2E;
+      color: #fff;
+      border: none;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 2px;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .btn-today:hover { background: #163d25; }
+
+    /* ── 2단 레이아웃 ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 36px;
+    }
+
+    /* 왼쪽 – 고객 정보 */
+    .col-left { display: flex; flex-direction: column; gap: 0; }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 4px;
+    }
+    .field-group label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 4px;
+    }
+    .field-group input[type="text"] {
+      border: none;
+      border-bottom: 1.5px solid #888;
+      padding: 6px 2px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #111;
+      background: transparent;
+      outline: none;
+      transition: border-color .2s;
+      margin-bottom: 12px;
+    }
+    .field-group input[type="text"]:focus {
+      border-bottom-color: #1B4D2E;
+    }
+
+    /* 왼쪽 하단 구분선 */
+    .col-left-bottom-line {
+      border: none;
+      border-top: 2px solid #111;
+      margin-top: auto;
+    }
+
+    /* 오른쪽 – 아이템 */
+    .col-right { display: flex; flex-direction: column; }
+
+    .col-right > .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #111;
+      border-bottom: 2px solid #111;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .item-box {
+      background: #e8e8e8;
+      padding: 14px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 160px;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .check-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #1B4D2E;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .check-item label {
+      font-size: 14px;
+      color: #111;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* 기타 직접입력 */
+    .etc-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .etc-row input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: #1B4D2E;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .etc-row label {
+      font-size: 14px;
+      color: #111;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .etc-row input[type="text"] {
+      flex: 1;
+      border: none;
+      border-bottom: 1px solid #999;
+      background: transparent;
+      font-size: 13px;
+      font-family: inherit;
+      padding: 2px 4px;
+      outline: none;
+      color: #111;
+      transition: border-color .2s;
+    }
+    .etc-row input[type="text"]:focus { border-bottom-color: #1B4D2E; }
+
+    /* 오른쪽 하단 구분선 */
+    .col-right-bottom-line {
+      border: none;
+      border-top: 2px solid #111;
+      margin-top: 12px;
+    }
+
+    /* ── 상담일지 ── */
+    .meeting-section { margin-bottom: 36px; }
+
+    .meeting-section .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #111;
+      border-bottom: 2px solid #111;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    .meeting-section textarea {
+      width: 100%;
+      min-height: 280px;
+      background: #e8e8e8;
+      border: none;
+      padding: 16px;
+      font-size: 14px;
+      font-family: inherit;
+      color: #111;
+      resize: vertical;
+      outline: none;
+      line-height: 1.7;
+    }
+    .meeting-section textarea::placeholder { color: #999; }
+    .meeting-section textarea:focus { background: #e0e0e0; }
+
+    /* 하단 구분선 */
+    .bottom-line {
+      border: none;
+      border-top: 2px solid #111;
+      margin-bottom: 20px;
+    }
+
+    /* ── 제출 버튼 ── */
+    .submit-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .btn-submit {
+      background: #1B4D2E;
+      color: #fff;
+      border: none;
+      padding: 12px 36px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 1px;
+      border-radius: 2px;
+      transition: background .2s, transform .1s;
+    }
+    .btn-submit:hover { background: #163d25; }
+    .btn-submit:active { transform: scale(.98); }
+    .btn-submit:disabled { background: #aaa; cursor: not-allowed; }
+
+    /* ── 알림 토스트 ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1B4D2E;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all .4s ease;
+      z-index: 999;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.error { background: #b91c1c; }
+  </style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- 헤더 -->
+  <div class="header">
+    <div class="title">AMPA 2026</div>
+    <div class="logo">
+      <!-- THE SMITH 헥사곤 로고 -->
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27"
+                 stroke="#1B4D2E" stroke-width="7" fill="none"/>
+        <polygon points="50,18 80,34 80,66 50,82 20,66 20,34"
+                 stroke="#1B4D2E" stroke-width="4" fill="none"/>
+        <line x1="50" y1="4"  x2="50" y2="18"  stroke="#1B4D2E" stroke-width="4"/>
+        <line x1="93" y1="27" x2="80" y2="34"  stroke="#1B4D2E" stroke-width="4"/>
+        <line x1="93" y1="73" x2="80" y2="66"  stroke="#1B4D2E" stroke-width="4"/>
+        <line x1="50" y1="96" x2="50" y2="82"  stroke="#1B4D2E" stroke-width="4"/>
+        <line x1="7"  y1="73" x2="20" y2="66"  stroke="#1B4D2E" stroke-width="4"/>
+        <line x1="7"  y1="27" x2="20" y2="34"  stroke="#1B4D2E" stroke-width="4"/>
+      </svg>
+      <div class="logo-text">THE SMITH</div>
+    </div>
+  </div>
+
+  <!-- 작성일 -->
+  <div class="date-row">
+    <label for="date">작성일</label>
+    <input type="date" id="date" name="date" />
+    <button class="btn-today" type="button" onclick="setToday()">오늘</button>
+  </div>
+
+  <!-- 2단: 고객정보 + 아이템 -->
+  <div class="two-col">
+
+    <!-- 왼쪽: 고객 정보 -->
+    <div class="col-left">
+      <div class="field-group">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" placeholder="" />
+      </div>
+      <div class="field-group">
+        <label for="country">Country</label>
+        <input type="text" id="country" name="country" placeholder="" />
+      </div>
+      <div class="field-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="" />
+      </div>
+      <hr class="col-left-bottom-line" />
+    </div>
+
+    <!-- 오른쪽: 아이템 선택 -->
+    <div class="col-right">
+      <div class="section-label">Item</div>
+      <div class="item-box">
+        <div class="check-item">
+          <input type="checkbox" id="item-psf" value="PSF" />
+          <label for="item-psf">PSF</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="item-ppf" value="PPF" />
+          <label for="item-ppf">PPF</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="item-wiper" value="와이퍼" />
+          <label for="item-wiper">와이퍼</label>
+        </div>
+        <div class="check-item">
+          <input type="checkbox" id="item-film" value="필름" />
+          <label for="item-film">필름</label>
+        </div>
+        <div class="etc-row">
+          <input type="checkbox" id="item-etc" value="기타" />
+          <label for="item-etc">기타</label>
+          <input type="text" id="etc-text" placeholder="직접 입력" />
+        </div>
+      </div>
+      <hr class="col-right-bottom-line" />
+    </div>
+
+  </div>
+
+  <!-- 상담일지 -->
+  <div class="meeting-section">
+    <div class="section-label">Meeting</div>
+    <textarea id="meeting" name="meeting"
+              placeholder="미팅 내용을 입력하여 주세요"></textarea>
+  </div>
+
+  <hr class="bottom-line" />
+
+  <!-- 제출 -->
+  <div class="submit-row">
+    <button class="btn-submit" id="submitBtn" type="button" onclick="submitForm()">
+      저장
+    </button>
+  </div>
+
+</div>
+
+<!-- 토스트 알림 -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── 스프레드시트 웹앱 URL (배포 후 여기에 붙여넣으세요) ──
+  const SHEET_URL = "여기에_Apps_Script_웹앱_URL_붙여넣기";
+
+  // 오늘 날짜 자동 설정
+  function setToday() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm   = String(today.getMonth() + 1).padStart(2, '0');
+    const dd   = String(today.getDate()).padStart(2, '0');
+    document.getElementById('date').value = `${yyyy}-${mm}-${dd}`;
+  }
+  setToday(); // 페이지 로드 시 자동 설정
+
+  // 기타 체크박스 토글 시 텍스트 필드 활성화
+  document.getElementById('item-etc').addEventListener('change', function() {
+    const txt = document.getElementById('etc-text');
+    txt.disabled = !this.checked;
+    if (!this.checked) txt.value = '';
+  });
+  document.getElementById('etc-text').disabled = true;
+
+  // 선택 아이템 수집
+  function getSelectedItems() {
+    const items = [];
+    const checkboxes = document.querySelectorAll('.item-box input[type="checkbox"]');
+    checkboxes.forEach(cb => {
+      if (cb.checked) {
+        if (cb.id === 'item-etc') {
+          const txt = document.getElementById('etc-text').value.trim();
+          if (txt) items.push('기타: ' + txt);
+          else items.push('기타');
+        } else {
+          items.push(cb.value);
+        }
+      }
+    });
+    return items.join(', ');
+  }
+
+  // 토스트 메시지
+  function showToast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    void t.offsetWidth;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // 폼 제출
+  async function submitForm() {
+    const date    = document.getElementById('date').value;
+    const company = document.getElementById('company').value.trim();
+    const country = document.getElementById('country').value.trim();
+    const name    = document.getElementById('name').value.trim();
+    const items   = getSelectedItems();
+    const meeting = document.getElementById('meeting').value.trim();
+
+    // 간단 유효성 검사
+    if (!date)    { showToast('작성일을 선택해 주세요.', true); return; }
+    if (!company) { showToast('회사명을 입력해 주세요.', true); return; }
+    if (!name)    { showToast('이름을 입력해 주세요.', true); return; }
+
+    // URL 미설정 시 경고
+    if (SHEET_URL.includes('여기에')) {
+      showToast('⚠️ Apps Script URL을 설정해 주세요.', true);
+      return;
+    }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '저장 중...';
+
+    const payload = { date, company, country, name, items, meeting };
+
+    try {
+      const res = await fetch(SHEET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (json.result === 'success') {
+        showToast('✓ 저장되었습니다!');
+        resetForm();
+      } else {
+        showToast('오류가 발생했습니다: ' + (json.error || ''), true);
+      }
+    } catch (e) {
+      showToast('전송 실패: 네트워크를 확인해 주세요.', true);
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '저장';
+    }
+  }
+
+  // 폼 초기화
+  function resetForm() {
+    document.getElementById('company').value = '';
+    document.getElementById('country').value = '';
+    document.getElementById('name').value    = '';
+    document.getElementById('meeting').value = '';
+    document.querySelectorAll('.item-box input[type="checkbox"]')
+      .forEach(cb => cb.checked = false);
+    document.getElementById('etc-text').value    = '';
+    document.getElementById('etc-text').disabled = true;
+    setToday();
+  }
+</script>
+</body>
+</html>
