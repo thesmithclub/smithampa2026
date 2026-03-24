@@ -449,53 +449,49 @@
   }
 
   // 폼 제출
-  async function submitForm() {
-    const date    = document.getElementById('date').value;
-    const company = document.getElementById('company').value.trim();
-    const country = document.getElementById('country').value.trim();
-    const name    = document.getElementById('name').value.trim();
-    const email   = document.getElementById('email').value.trim();
-    const contact = document.getElementById('contact').value.trim();
-    const items   = getSelectedItems();
-    const meeting = document.getElementById('meeting').value.trim();
+ async function submitForm() {
+  const date = document.getElementById('date').value;
+  const company = document.getElementById('company').value.trim();
+  const country = document.getElementById('country').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const contact = document.getElementById('contact').value.trim();
+  const items = getSelectedItems();
+  const meeting = document.getElementById('meeting').value.trim();
 
-    // 간단 유효성 검사
-    if (!date)    { showToast('작성일을 선택해 주세요.', true); return; }
-    if (!company) { showToast('회사명을 입력해 주세요.', true); return; }
-    if (!name)    { showToast('이름을 입력해 주세요.', true); return; }
+  if (!date) { showToast('작성일을 선택해 주세요.', true); return; }
+  if (!company) { showToast('회사명을 입력해 주세요.', true); return; }
+  if (!name) { showToast('이름을 입력해 주세요.', true); return; }
 
-    // URL 미설정 시 경고
-    if (SHEET_URL.includes('여기에')) {
-      showToast('⚠️ Apps Script URL을 설정해 주세요.', true);
-      return;
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '저장 중...';
+
+  const payload = { date, company, country, name, email, contact, items, meeting };
+
+  try {
+    const res = await fetch(SHEET_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(payload),
+      redirect: 'follow'
+    });
+
+    const json = await res.json();
+    if (json.result === 'success') {
+      showToast('✓ 저장되었습니다!');
+      resetForm();
+    } else {
+      showToast('오류가 발생했습니다: ' + (json.error || ''), true);
     }
-
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = '저장 중...';
-
-    const payload = { date, company, country, name, email, contact, items, meeting };
-
-    try {
-      const res = await fetch(SHEET_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-      if (json.result === 'success') {
-        showToast('✓ 저장되었습니다!');
-        resetForm();
-      } else {
-        showToast('오류가 발생했습니다: ' + (json.error || ''), true);
-      }
-    } catch (e) {
-      showToast('전송 실패: 네트워크를 확인해 주세요.', true);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = '저장';
-    }
+  } catch (e) {
+    console.error('전송 에러 상세:', e);   // ← 콘솔에 자세한 로그 남김
+    showToast('전송 실패: 네트워크를 확인해 주세요.', true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '저장';
   }
+}
 
   // 폼 초기화
   function resetForm() {
