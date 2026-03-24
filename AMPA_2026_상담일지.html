@@ -62,20 +62,7 @@
       line-height: 1;
     }
 
-    /* THE SMITH 로고 */
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-    .logo svg { width: 36px; height: 36px; }
-    .logo-text {
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 2px;
-      color: #111;
-    }
+/* THE SMITH 로고 - 제거됨 */
 
     /* ── 작성일 행 ── */
     .date-row {
@@ -155,12 +142,7 @@
       border-bottom-color: #1B4D2E;
     }
 
-    /* 왼쪽 하단 구분선 */
-    .col-left-bottom-line {
-      border: none;
-      border-top: 2px solid #111;
-      margin-top: auto;
-    }
+    /* 왼쪽 하단 구분선 - 제거됨 (그리드로 통합) */
 
     /* 오른쪽 – 아이템 */
     .col-right { display: flex; flex-direction: column; }
@@ -236,12 +218,7 @@
     }
     .etc-row input[type="text"]:focus { border-bottom-color: #1B4D2E; }
 
-    /* 오른쪽 하단 구분선 */
-    .col-right-bottom-line {
-      border: none;
-      border-top: 2px solid #111;
-      margin-top: 12px;
-    }
+    /* 오른쪽 하단 구분선 - 제거됨 */
 
     /* ── 상담일지 ── */
     .meeting-section { margin-bottom: 36px; }
@@ -332,22 +309,6 @@
   <!-- 헤더 -->
   <div class="header">
     <div class="title">AMPA 2026</div>
-    <div class="logo">
-      <!-- THE SMITH 헥사곤 로고 -->
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <polygon points="50,4 93,27 93,73 50,96 7,73 7,27"
-                 stroke="#1B4D2E" stroke-width="7" fill="none"/>
-        <polygon points="50,18 80,34 80,66 50,82 20,66 20,34"
-                 stroke="#1B4D2E" stroke-width="4" fill="none"/>
-        <line x1="50" y1="4"  x2="50" y2="18"  stroke="#1B4D2E" stroke-width="4"/>
-        <line x1="93" y1="27" x2="80" y2="34"  stroke="#1B4D2E" stroke-width="4"/>
-        <line x1="93" y1="73" x2="80" y2="66"  stroke="#1B4D2E" stroke-width="4"/>
-        <line x1="50" y1="96" x2="50" y2="82"  stroke="#1B4D2E" stroke-width="4"/>
-        <line x1="7"  y1="73" x2="20" y2="66"  stroke="#1B4D2E" stroke-width="4"/>
-        <line x1="7"  y1="27" x2="20" y2="34"  stroke="#1B4D2E" stroke-width="4"/>
-      </svg>
-      <div class="logo-text">THE SMITH</div>
-    </div>
   </div>
 
   <!-- 작성일 -->
@@ -357,10 +318,9 @@
     <button class="btn-today" type="button" onclick="setToday()">오늘</button>
   </div>
 
-  <!-- 2단: 고객정보 + 아이템 -->
+  <!-- 고객정보 및 컨택트 -->
   <div class="two-col">
-
-    <!-- 왼쪽: 고객 정보 -->
+    <!-- 왼쪽: 회사/국가/이름 -->
     <div class="col-left">
       <div class="field-group">
         <label for="company">Company</label>
@@ -374,38 +334,47 @@
         <label for="name">Name</label>
         <input type="text" id="name" name="name" placeholder="" />
       </div>
-      <hr class="col-left-bottom-line" />
     </div>
 
-    <!-- 오른쪽: 아이템 선택 -->
+    <!-- 오른쪽: 이메일/연락처 -->
     <div class="col-right">
-      <div class="section-label">Item</div>
-      <div class="item-box">
-        <div class="check-item">
-          <input type="checkbox" id="item-psf" value="PSF" />
-          <label for="item-psf">PSF</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="item-ppf" value="PPF" />
-          <label for="item-ppf">PPF</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="item-wiper" value="와이퍼" />
-          <label for="item-wiper">와이퍼</label>
-        </div>
-        <div class="check-item">
-          <input type="checkbox" id="item-film" value="필름" />
-          <label for="item-film">필름</label>
-        </div>
-        <div class="etc-row">
-          <input type="checkbox" id="item-etc" value="기타" />
-          <label for="item-etc">기타</label>
-          <input type="text" id="etc-text" placeholder="직접 입력" />
-        </div>
+      <div class="field-group">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" placeholder="" />
       </div>
-      <hr class="col-right-bottom-line" />
+      <div class="field-group">
+        <label for="contact">Contact Number (연락처)</label>
+        <input type="text" id="contact" name="contact" placeholder="" />
+      </div>
     </div>
+  </div>
 
+  <!-- 아이템 선택 -->
+  <div class="meeting-section" style="margin-top: 24px;">
+    <div class="section-label">Item</div>
+    <div class="item-box" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: #f9f9f9; border: 1px solid #ddd; padding: 20px;">
+      <div class="check-item">
+        <input type="checkbox" id="item-psf" value="PSF" />
+        <label for="item-psf">PSF</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="item-ppf" value="PPF" />
+        <label for="item-ppf">PPF</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="item-wiper" value="와이퍼" />
+        <label for="item-wiper">와이퍼</label>
+      </div>
+      <div class="check-item">
+        <input type="checkbox" id="item-film" value="필름" />
+        <label for="item-film">필름</label>
+      </div>
+      <div class="etc-row" style="grid-column: span 2;">
+        <input type="checkbox" id="item-etc" value="기타" />
+        <label for="item-etc">기타</label>
+        <input type="text" id="etc-text" placeholder="직접 입력" style="margin-left: 8px; flex: 1;" />
+      </div>
+    </div>
   </div>
 
   <!-- 상담일지 -->
@@ -431,7 +400,7 @@
 
 <script>
   // ── 스프레드시트 웹앱 URL (배포 후 여기에 붙여넣으세요) ──
-  const SHEET_URL = "여기에_Apps_Script_웹앱_URL_붙여넣기";
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzsHUKOvUEmEP2vLjg56CGzj3zTOx1lkbiILNlZNUCYgljcyO9S4Tn8J_JTEOZrOuiNQA/exec";
 
   // 오늘 날짜 자동 설정
   function setToday() {
@@ -485,6 +454,8 @@
     const company = document.getElementById('company').value.trim();
     const country = document.getElementById('country').value.trim();
     const name    = document.getElementById('name').value.trim();
+    const email   = document.getElementById('email').value.trim();
+    const contact = document.getElementById('contact').value.trim();
     const items   = getSelectedItems();
     const meeting = document.getElementById('meeting').value.trim();
 
@@ -503,7 +474,7 @@
     btn.disabled = true;
     btn.textContent = '저장 중...';
 
-    const payload = { date, company, country, name, items, meeting };
+    const payload = { date, company, country, name, email, contact, items, meeting };
 
     try {
       const res = await fetch(SHEET_URL, {
@@ -531,6 +502,8 @@
     document.getElementById('company').value = '';
     document.getElementById('country').value = '';
     document.getElementById('name').value    = '';
+    document.getElementById('email').value   = '';
+    document.getElementById('contact').value = '';
     document.getElementById('meeting').value = '';
     document.querySelectorAll('.item-box input[type="checkbox"]')
       .forEach(cb => cb.checked = false);
